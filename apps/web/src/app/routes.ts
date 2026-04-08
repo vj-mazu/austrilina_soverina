@@ -5,8 +5,10 @@ import {
 } from "@react-router/dev/routes";
 
 // Use Vite's import.meta.glob to discover all page files at build time.
-// This is much more robust for production builds on Vercel than manual filesystem scanning.
-const pageFiles = import.meta.glob("./**/page.jsx", { eager: true });
+// Exclude internal '__create' folders which contain dev shims and server logic.
+const pageFiles = import.meta.glob(["./**/page.jsx", "!./**/__create/**"], {
+  eager: true,
+});
 
 function getRoutesFromGlob(): RouteConfigEntry[] {
   const routes: RouteConfigEntry[] = [];

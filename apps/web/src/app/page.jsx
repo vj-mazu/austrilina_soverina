@@ -212,14 +212,14 @@ export default function HomePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <a
-                href="#gallery"
+                href="/#gallery"
                 className="bg-gradient-to-r from-[#D4A574] to-[#A67C52] text-white px-8 py-4 rounded-lg font-semibold hover:shadow-2xl hover:shadow-[#D4A574]/40 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2"
               >
                 Explore Collection
                 <ChevronRight className="w-5 h-5" />
               </a>
               <a
-                href="#location"
+                href="/#location"
                 className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-lg font-semibold border border-white/20 hover:bg-white/20 hover:border-[#D4A574]/50 transition-all duration-300 transform hover:-translate-y-1"
               >
                 Find Us

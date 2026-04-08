@@ -56,7 +56,7 @@ function getRoutesFromGlob(): RouteConfigEntry[] {
 
 const routes = [
   ...getRoutesFromGlob(),
-  route("*?", "./__create/not-found.tsx"),
+  route("*", "./__create/not-found.tsx"),
 ];
 
 export default routes;

@@ -151,6 +151,7 @@ if (process.env.AUTH_SECRET) {
                       ? provider.toLowerCase()
                       : 'google';
                   const newUser = await adapter.createUser({
+                    id: crypto.randomUUID(),
                     emailVerified: null,
                     email,
                     name:
@@ -241,6 +242,7 @@ if (process.env.AUTH_SECRET) {
             const user = await adapter.getUserByEmail(email);
             if (!user) {
               const newUser = await adapter.createUser({
+                id: crypto.randomUUID(),
                 emailVerified: null,
                 email,
                 name: typeof name === 'string' && name.length > 0 ? name : undefined,
@@ -293,7 +295,11 @@ app.use('/api/auth/*', async (c, next) => {
 });
 app.route(API_BASENAME, api);
 
-export default await createHonoServer({
-  app,
-  defaultLogger: false,
-});
+if (process.env.NODE_ENV === 'development' || !process.env.VERCEL) {
+  await createHonoServer({
+    app,
+    defaultLogger: false,
+  });
+}
+
+export default app;

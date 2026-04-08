@@ -13,7 +13,6 @@ import { bodyLimit } from 'hono/body-limit';
 import { requestId } from 'hono/request-id';
 import { createHonoServer } from 'react-router-hono-server/node';
 import { serializeError } from 'serialize-error';
-import * as build from "../build/server/index";
 import ws from 'ws';
 import NeonAdapter from './adapter';
 import { getHTMLForErrorPage } from './get-html-for-error-page';
@@ -296,11 +295,6 @@ app.use('/api/auth/*', async (c, next) => {
 });
 app.route(API_BASENAME, api);
 
-const { app: renderApp } = await createHonoServer({
-  build,
-  mode: process.env.NODE_ENV as any,
+export default await createHonoServer({
+  app,
 });
-
-renderApp.route("/", app);
-
-export default renderApp;

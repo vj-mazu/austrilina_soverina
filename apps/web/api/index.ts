@@ -1,8 +1,11 @@
 import { handle } from "hono/vercel";
-import app from "../__create/index";
+import renderAppPromise from "../__create/index";
 
 export const config = {
   runtime: "nodejs",
 };
 
-export default handle(app);
+export default async (req: Request) => {
+  const app = await renderAppPromise;
+  return handle(app)(req);
+};

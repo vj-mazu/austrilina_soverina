@@ -6,9 +6,7 @@ import {
 
 // Use Vite's import.meta.glob to discover all page files at build time.
 // Exclude internal '__create' folders which contain dev shims and server logic.
-const pageFiles = import.meta.glob(["./**/page.jsx", "!./**/__create/**"], {
-  eager: true,
-});
+const pageFiles = import.meta.glob(["./**/page.jsx", "!./**/__create/**"]);
 
 function getRoutesFromGlob(): RouteConfigEntry[] {
   const routes: RouteConfigEntry[] = [];

@@ -9,6 +9,7 @@ import {
   FileText,
   Mail,
   Phone,
+  ArrowLeft,
 } from "lucide-react";
 
 export default function PrivacyPage() {
@@ -57,8 +58,15 @@ export default function PrivacyPage() {
 
       {/* Hero Section */}
       <section className="pt-40 pb-20 bg-gradient-to-b from-white to-[#FAFAF5]">
-        <div className="max-w-4xl mx-auto px-6 md:px-8 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#D4A574]/10 text-[#D4A574] mb-8">
+        <div className="max-w-4xl mx-auto px-6 md:px-8 text-center relative">
+          <a
+            href="/"
+            className="absolute left-6 md:left-8 top-0 flex items-center gap-2 text-[#666] hover:text-[#D4A574] transition-colors duration-300 font-medium bg-white px-4 py-2 rounded-lg shadow-sm border border-[#E5E5E5] hover:shadow-md"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Home
+          </a>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#D4A574]/10 text-[#D4A574] mb-8 mt-12 md:mt-0">
             <Shield className="w-10 h-10" />
           </div>
           <h1 className="text-5xl md:text-6xl font-bold text-[#1A1A1A] font-cormorant mb-6">

@@ -500,11 +500,11 @@ export default function HomePage() {
 
               <div className="space-y-10">
                 <div className="flex gap-5 group">
-                  <div className="flex-shrink-0">
+                  <a href="https://maps.app.goo.gl/9sLn4ne35KxSpJiZ9" target="_blank" rel="noopener noreferrer" className="flex-shrink-0">
                     <div className="w-14 h-14 rounded-full bg-[#D4A574]/10 flex items-center justify-center transform transition-all duration-500 group-hover:scale-110 border border-[#D4A574]/20">
                       <MapPin className="w-6 h-6 text-[#D4A574]" />
                     </div>
-                  </div>
+                  </a>
                   <div>
                     <h3 className="text-lg font-bold mb-3 font-cormorant">
                       Address
@@ -532,11 +532,11 @@ export default function HomePage() {
                 </div>
 
                 <div className="flex gap-5 group">
-                  <div className="flex-shrink-0">
+                  <a href="tel:+61396500992" className="flex-shrink-0">
                     <div className="w-14 h-14 rounded-full bg-[#D4A574]/10 flex items-center justify-center transform transition-all duration-500 group-hover:scale-110 border border-[#D4A574]/20">
                       <Phone className="w-6 h-6 text-[#D4A574]" />
                     </div>
-                  </div>
+                  </a>
                   <div>
                     <h3 className="text-lg font-bold mb-3 font-cormorant">
                       Contact
@@ -600,46 +600,22 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Location Map - Clickable link with icon */}
+            {/* Location Map - Embedded Iframe */}
             <div className="flex items-center justify-center">
-              <a
-                href="https://maps.app.goo.gl/9sLn4ne35KxSpJiZ9"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative w-full h-[650px] rounded-2xl overflow-hidden bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] border border-[#D4A574]/10 hover:border-[#D4A574]/40 transition-all duration-700 flex flex-col items-center justify-center shadow-2xl hover:shadow-[#D4A574]/10"
+              <div
+                className="group relative w-full h-[650px] rounded-2xl overflow-hidden shadow-2xl bg-[#1A1A1A] border border-[#D4A574]/10"
               >
-                {/* Decorative map pattern background */}
-                <div className="absolute inset-0 opacity-5">
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(212,165,116,0.3) 40px, rgba(212,165,116,0.3) 41px), repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(212,165,116,0.3) 40px, rgba(212,165,116,0.3) 41px)`,
-                    }}
-                  ></div>
-                </div>
-
-                {/* Animated pin */}
-                <div className="relative mb-8">
-                  <div className="w-28 h-28 rounded-full bg-[#D4A574]/10 flex items-center justify-center transform transition-all duration-700 group-hover:scale-110 border-2 border-[#D4A574]/20 group-hover:border-[#D4A574]/50">
-                    <div className="w-20 h-20 rounded-full bg-[#D4A574]/20 flex items-center justify-center">
-                      <MapPin className="w-10 h-10 text-[#D4A574] transform transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1" />
-                    </div>
-                  </div>
-                  {/* Pulse ring */}
-                  <div className="absolute inset-0 rounded-full border-2 border-[#D4A574]/30 animate-ping-slow"></div>
-                </div>
-
-                <h3 className="text-2xl font-bold font-cormorant text-white mb-2 transition-colors duration-300 group-hover:text-[#D4A574]">
-                  Find Us on Google Maps
-                </h3>
-                <p className="text-white/50 text-sm font-light mb-6 text-center px-8">
-                  Shop 2a/37 Swanston St, Melbourne VIC 3000
-                </p>
-                <div className="flex items-center gap-2 text-[#D4A574] text-sm font-semibold transform transition-all duration-300 group-hover:translate-x-2">
-                  <span>Open Directions</span>
-                  <ExternalLink className="w-4 h-4" />
-                </div>
-              </a>
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.7589886362534!2d144.9634994119339!3d-37.81734267184249!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642b6a22f36cd%3A0xe67ba3dca4b53bfb!2sSouvenirs%20Australiana!5e0!3m2!1sen!2sau!4v1712497676751!5m2!1sen!2sau"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen=""
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  className="filter opacity-90 transition-opacity duration-500 hover:opacity-100 grayscale hover:grayscale-0"
+                ></iframe>
+              </div>
             </div>
           </div>
         </div>

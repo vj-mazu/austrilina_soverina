@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import {
   Phone,
   MapPin,
@@ -9,14 +9,17 @@ import {
   Smartphone,
   Accessibility,
   Store,
-  ShoppingBag,
-  Globe,
   Heart,
   Award,
   Users,
   ExternalLink,
-  Mail,
   ChevronRight,
+  MessageCircle,
+  Shield,
+  Gem,
+  Leaf,
+  Star,
+  Sparkles,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -24,15 +27,28 @@ export default function HomePage() {
   const [activeImage, setActiveImage] = useState(0);
   const heroRef = useRef(null);
 
+  const scrollToSection = useCallback((e, sectionId) => {
+    e.preventDefault();
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const navHeight = 80;
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: elementPosition - navHeight,
+        behavior: "smooth",
+      });
+    }
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
     };
     window.addEventListener("scroll", handleScroll);
 
-    // Intersection Observer for scroll animations
     const observerOptions = {
       threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -43,22 +59,26 @@ export default function HomePage() {
       });
     }, observerOptions);
 
-    const animatedElements = document.querySelectorAll(
-      ".section-fade, .feature-card-fade, .gallery-card, .hero-content"
-    );
-    animatedElements.forEach((el) => observer.observe(el));
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      const animatedElements = document.querySelectorAll(
+        ".section-fade, .feature-card-fade, .gallery-card, .hero-content"
+      );
+      animatedElements.forEach((el) => observer.observe(el));
 
-    handleScroll(); // Initial check
+      // Ensure hero is visible on load
+      const heroContent = document.querySelector(".hero-content");
+      if (heroContent) {
+        heroContent.classList.add("is-visible");
+      }
+    }, 150);
 
-    // Fallback: Ensure hero is visible if the observer misses it on load
-    const heroContent = document.querySelector(".hero-content");
-    if (heroContent) {
-      setTimeout(() => heroContent.classList.add("is-visible"), 100);
-    }
+    handleScroll();
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("scroll", handleScroll);
-      animatedElements.forEach((el) => observer.unobserve(el));
+      observer.disconnect();
     };
   }, []);
 
@@ -135,14 +155,15 @@ export default function HomePage() {
             </a>
             <div className="hidden md:flex items-center gap-8">
               {[
-                { label: "About", href: "/#about" },
-                { label: "Gallery", href: "/#gallery" },
-                { label: "Visit", href: "/#location" },
-                { label: "Privacy", href: "/privacy" },
+                { label: "About", href: "about" },
+                { label: "Gallery", href: "gallery" },
+                { label: "Visit", href: "location" },
+                { label: "Privacy", href: "/privacy", isPage: true },
               ].map((link) => (
                 <a
                   key={link.label}
-                  href={link.href}
+                  href={link.isPage ? link.href : `#${link.href}`}
+                  onClick={link.isPage ? undefined : (e) => scrollToSection(e, link.href)}
                   className={`text-sm transition-colors duration-300 font-light tracking-wide ${
                     scrollY > 50
                       ? "text-[#4A4A4A] hover:text-[#D4A574]"
@@ -212,14 +233,16 @@ export default function HomePage() {
             </p>
             <div className="flex gap-4 justify-center flex-wrap">
               <a
-                href="/#gallery"
+                href="#gallery"
+                onClick={(e) => scrollToSection(e, "gallery")}
                 className="bg-gradient-to-r from-[#D4A574] to-[#A67C52] text-white px-8 py-4 rounded-lg font-semibold hover:shadow-2xl hover:shadow-[#D4A574]/40 transition-all duration-300 transform hover:-translate-y-1 flex items-center gap-2"
               >
                 Explore Collection
                 <ChevronRight className="w-5 h-5" />
               </a>
               <a
-                href="/#location"
+                href="#location"
+                onClick={(e) => scrollToSection(e, "location")}
                 className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-lg font-semibold border border-white/20 hover:bg-white/20 hover:border-[#D4A574]/50 transition-all duration-300 transform hover:-translate-y-1"
               >
                 Find Us
@@ -275,27 +298,38 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-12 mb-16">
             {[
               {
-                icon: <Award className="w-10 h-10" />,
+                icon: <Gem className="w-10 h-10" />,
+                badgeIcon: <Sparkles className="w-4 h-4" />,
                 title: "Premium Quality",
                 description:
                   "Only authentic, Australian-made products from trusted artisans and suppliers",
+                accent: "from-[#D4A574] to-[#C4956A]",
               },
               {
-                icon: <Heart className="w-10 h-10" />,
+                icon: <Leaf className="w-10 h-10" />,
+                badgeIcon: <Heart className="w-4 h-4" />,
                 title: "Local Heritage",
                 description:
                   "Supporting Aboriginal artists and local craftspeople for nearly three decades",
+                accent: "from-[#6B8E6B] to-[#5A7D5A]",
               },
               {
-                icon: <Users className="w-10 h-10" />,
+                icon: <Star className="w-10 h-10" />,
+                badgeIcon: <Award className="w-4 h-4" />,
                 title: "Expert Service",
                 description:
                   "Knowledgeable staff ready to help you find the perfect Australian memento",
+                accent: "from-[#B8860B] to-[#996515]",
               },
             ].map((item, index) => (
-              <div key={index} className="text-center feature-card-fade">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#FAFAF5] text-[#D4A574] mb-6 transform transition-all duration-500 group-hover:scale-110 shadow-sm">
-                  {item.icon}
+              <div key={index} className="text-center feature-card-fade group">
+                <div className="relative inline-block mb-8">
+                  <div className={`w-24 h-24 rounded-2xl bg-gradient-to-br ${item.accent} flex items-center justify-center text-white shadow-lg transform transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-xl`}>
+                    {item.icon}
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-white shadow-md flex items-center justify-center text-[#D4A574] transform transition-all duration-500 group-hover:scale-110">
+                    {item.badgeIcon}
+                  </div>
                 </div>
                 <h3 className="text-xl font-bold text-[#1A1A1A] mb-3 font-cormorant">
                   {item.title}
@@ -435,9 +469,9 @@ export default function HomePage() {
             ].map((feature, index) => (
               <div
                 key={index}
-                className="text-center p-8 rounded-2xl bg-[#FAFAF5] hover:bg-white transition-all duration-500 transform hover:-translate-y-2 border border-transparent hover:border-[#D4A574]/20 group"
+                className="text-center p-8 rounded-2xl bg-[#FAFAF5] hover:bg-white transition-all duration-500 transform hover:-translate-y-2 border border-transparent hover:border-[#D4A574]/20 group feature-card-fade"
               >
-                <div className="inline-flex items-center justify-center w-18 h-18 rounded-full bg-white text-[#D4A574] mb-6 transform transition-all duration-500 group-hover:scale-110 shadow-sm">
+                <div className="inline-flex items-center justify-center w-18 h-18 rounded-full bg-white text-[#D4A574] mb-6 transform transition-all duration-500 group-hover:scale-110 shadow-sm p-4">
                   {feature.icon}
                 </div>
                 <h3 className="text-lg font-bold text-[#1A1A1A] mb-3 font-cormorant">
@@ -509,9 +543,18 @@ export default function HomePage() {
                     </h3>
                     <a
                       href="tel:+61396500992"
-                      className="text-[#D4A574] text-xl hover:text-white transition-colors duration-300"
+                      className="text-[#D4A574] text-xl hover:text-white transition-colors duration-300 block mb-2"
                     >
                       +61 3 9650 0992
+                    </a>
+                    <a
+                      href="https://wa.me/61396500992"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-[#25D366] text-sm hover:text-white transition-colors duration-300"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      Chat on WhatsApp
                     </a>
                   </div>
                 </div>
@@ -557,21 +600,61 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="rounded-2xl overflow-hidden shadow-2xl h-[650px] transform hover:scale-[1.02] transition-transform duration-500">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8385247094424!2d144.96333631531654!3d-37.81406397975162!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642ca6d8ae3f9%3A0x5045675218ce7e0!2s37%20Swanston%20St%2C%20Melbourne%20VIC%203000!5e0!3m2!1sen!2sau!4v1234567890123!5m2!1sen!2sau"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="grayscale-[0.3] hover:grayscale-0 transition-all duration-700"
-              ></iframe>
+            {/* Location Map - Clickable link with icon */}
+            <div className="flex items-center justify-center">
+              <a
+                href="https://maps.app.goo.gl/9sLn4ne35KxSpJiZ9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative w-full h-[650px] rounded-2xl overflow-hidden bg-gradient-to-br from-[#2A2A2A] to-[#1A1A1A] border border-[#D4A574]/10 hover:border-[#D4A574]/40 transition-all duration-700 flex flex-col items-center justify-center shadow-2xl hover:shadow-[#D4A574]/10"
+              >
+                {/* Decorative map pattern background */}
+                <div className="absolute inset-0 opacity-5">
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(212,165,116,0.3) 40px, rgba(212,165,116,0.3) 41px), repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(212,165,116,0.3) 40px, rgba(212,165,116,0.3) 41px)`,
+                    }}
+                  ></div>
+                </div>
+
+                {/* Animated pin */}
+                <div className="relative mb-8">
+                  <div className="w-28 h-28 rounded-full bg-[#D4A574]/10 flex items-center justify-center transform transition-all duration-700 group-hover:scale-110 border-2 border-[#D4A574]/20 group-hover:border-[#D4A574]/50">
+                    <div className="w-20 h-20 rounded-full bg-[#D4A574]/20 flex items-center justify-center">
+                      <MapPin className="w-10 h-10 text-[#D4A574] transform transition-all duration-500 group-hover:scale-110 group-hover:-translate-y-1" />
+                    </div>
+                  </div>
+                  {/* Pulse ring */}
+                  <div className="absolute inset-0 rounded-full border-2 border-[#D4A574]/30 animate-ping-slow"></div>
+                </div>
+
+                <h3 className="text-2xl font-bold font-cormorant text-white mb-2 transition-colors duration-300 group-hover:text-[#D4A574]">
+                  Find Us on Google Maps
+                </h3>
+                <p className="text-white/50 text-sm font-light mb-6 text-center px-8">
+                  Shop 2a/37 Swanston St, Melbourne VIC 3000
+                </p>
+                <div className="flex items-center gap-2 text-[#D4A574] text-sm font-semibold transform transition-all duration-300 group-hover:translate-x-2">
+                  <span>Open Directions</span>
+                  <ExternalLink className="w-4 h-4" />
+                </div>
+              </a>
             </div>
           </div>
         </div>
       </section>
+
+      {/* WhatsApp Floating Button */}
+      <a
+        href="https://wa.me/61396500992"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-[#25D366] rounded-full flex items-center justify-center shadow-lg hover:shadow-xl hover:shadow-[#25D366]/30 transform hover:-translate-y-1 transition-all duration-300"
+        aria-label="Chat on WhatsApp"
+      >
+        <MessageCircle className="w-7 h-7 text-white" />
+      </a>
 
       {/* Footer */}
       <footer className="bg-[#0F0F0F] text-white py-16">
@@ -601,18 +684,21 @@ export default function HomePage() {
               <div className="space-y-3">
                 <a
                   href="#about"
+                  onClick={(e) => scrollToSection(e, "about")}
                   className="block text-sm text-white/60 hover:text-[#D4A574] transition-colors duration-300"
                 >
                   About Us
                 </a>
                 <a
                   href="#gallery"
+                  onClick={(e) => scrollToSection(e, "gallery")}
                   className="block text-sm text-white/60 hover:text-[#D4A574] transition-colors duration-300"
                 >
                   Our Collection
                 </a>
                 <a
                   href="#location"
+                  onClick={(e) => scrollToSection(e, "location")}
                   className="block text-sm text-white/60 hover:text-[#D4A574] transition-colors duration-300"
                 >
                   Visit Us
@@ -638,11 +724,24 @@ export default function HomePage() {
                   <Phone className="w-4 h-4" />
                   +61 3 9650 0992
                 </a>
-                <p className="text-sm text-white/60">
-                  Shop 2a/37 Swanston St
-                  <br />
-                  Melbourne VIC 3000
-                </p>
+                <a
+                  href="https://wa.me/61396500992"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-white/60 hover:text-[#25D366] transition-colors duration-300"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                  WhatsApp
+                </a>
+                <a
+                  href="https://maps.app.goo.gl/9sLn4ne35KxSpJiZ9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-white/60 hover:text-[#D4A574] transition-colors duration-300"
+                >
+                  <MapPin className="w-4 h-4" />
+                  Shop 2a/37 Swanston St, Melbourne VIC 3000
+                </a>
               </div>
             </div>
           </div>
@@ -702,15 +801,31 @@ export default function HomePage() {
           will-change: transform;
         }
 
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
+        @keyframes pingSlow {
+          0% {
+            transform: scale(1);
+            opacity: 0.4;
           }
-          to {
-            opacity: 1;
+          100% {
+            transform: scale(1.5);
+            opacity: 0;
           }
         }
 
+        .animate-ping-slow {
+          animation: pingSlow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+
+        /* Animation base states - elements start invisible */
+        .hero-content,
+        .section-fade,
+        .feature-card-fade,
+        .gallery-card {
+          opacity: 0;
+          transform: translateY(40px);
+        }
+
+        /* Animation trigger */
         .hero-content.is-visible {
           animation: fadeInUp 1.2s ease-out forwards;
         }
